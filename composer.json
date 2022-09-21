@@ -1,0 +1,24 @@
+{
+    "name": "kenjiefx/strawberry-framework",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Kenjiefx\\StrawberryFramework\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "rterrado",
+            "email": "terradokenjie@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "tedivm/jshrink": "dev-master",
+        "slim/slim": "4.x-dev",
+        "guzzlehttp/psr7": "2.4.x-dev",
+        "psr/container": "2.0.x-dev",
+        "league/container": "4.x-dev"
+    }
+}
