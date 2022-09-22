@@ -12,6 +12,7 @@ class ThemeModel
         )
     {
         $this->name = $name;
+        return $this;
     }
 
     public function setRawHTML(
@@ -28,7 +29,12 @@ class ThemeModel
 
     public function getIndexPath()
     {
-        return ROOT.'/theme/'.$this->name.'/index.php';
+        return $this->getThemeDir().'/index.php';
+    }
+
+    public function getThemeDir()
+    {
+        return ROOT.'/theme/'.$this->name;
     }
 
 }

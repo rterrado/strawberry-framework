@@ -7,7 +7,7 @@ use Kenjiefx\StrawberryFramework\App\Models\ThemeModel;
 use Kenjiefx\StrawberryFramework\App\Models\BuildInstance;
 use Kenjiefx\StrawberryFramework\App\Controllers\JsController;
 use Kenjiefx\StrawberryFramework\App\Controllers\CssController;
-use Kenjiefx\StrawberryFramework\App\Controllers\ComponentController;
+use Kenjiefx\StrawberryFramework\App\Controllers\ThemeController;
 
 class Builder
 {
@@ -15,7 +15,7 @@ class Builder
     public function __construct(
         private AppConfig $Config,
         private ThemeModel $ThemeModel,
-        private ComponentController $Component,
+        private ThemeController $ThemeController,
         private JsController $Js,
         private CssController $Css 
         )
@@ -26,8 +26,8 @@ class Builder
 
     public function component()
     {
-        $this->Component->setTheme($this->ThemeModel);
-        $this->Component->compile();
+        $this->ThemeController->setTheme($this->ThemeModel);
+        $this->ThemeController->compile();
         return $this->ThemeModel->getRawHTML();
     }
 

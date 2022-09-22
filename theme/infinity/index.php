@@ -5,6 +5,6 @@
         <title>Strawberry Framework</title>
     </head>
     <body>
-        <?php component(); ?>
+        <?php component('Loader'); ?>
     </body>
 </html>

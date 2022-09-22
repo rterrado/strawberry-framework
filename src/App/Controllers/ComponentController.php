@@ -5,17 +5,48 @@ namespace Kenjiefx\StrawberryFramework\App\Controllers;
 use Kenjiefx\StrawberryFramework\App\Models\AppConfig;
 use Kenjiefx\StrawberryFramework\App\Models\ThemeModel;
 use Kenjiefx\StrawberryFramework\App\Cache\ComponentCache;
+use Kenjiefx\StrawberryFramework\App\Models\ComponentModel;
 use Kenjiefx\StrawberryFramework\App\Controllers\ThemeController;
 
 class ComponentController extends ThemeController
 {
+
+    protected ThemeModel $ThemeModel;
+
     public function __construct(
         private AppConfig $Config,
-        protected ThemeModel $ThemeModel,
-        protected ComponentCache $ComponentCache
+        protected ComponentCache $ComponentCache,
+        protected ComponentModel $ComponentModel
         )
     {
         
     }
+
+    public function setComponentName(
+        string $name
+        )
+    {
+        $this->ComponentModel->setName($name);
+    }
+
+    public function getHTMLPath()
+    {
+        return $this->getComponentDir().
+               '/'.
+               $this->ComponentModel->getName().
+               '.php';
+    }
+
+    public function getComponentDir()
+    {
+        return $this->ThemeModel->getThemeDir().
+               ComponentModel::DIR.
+               '/'.
+               $this->ComponentModel->getName();
+    }
+
+
+
+
 
 }
