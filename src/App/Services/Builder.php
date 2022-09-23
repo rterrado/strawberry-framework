@@ -34,6 +34,26 @@ class Builder
         return $this->Css->getProcessedHTML();
     }
 
+    public function widget(
+        string $type
+    )
+    {
+        $mimeType = 'text/html';
+        $returnContent = '';
+        switch ($type) {
+            case 'app.css': 
+                $mimeType = 'text/css';
+                $returnContent .= $this->Css->getFromCache();
+                break;
+            default: 
+                break;
+        }
+        return [
+            'type' => $mimeType,
+            'content' => $returnContent
+        ];
+    }
+
 
 
 

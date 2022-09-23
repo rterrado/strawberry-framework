@@ -6,6 +6,8 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Slim\App as RouteServiceProvider;
 use Kenjiefx\StrawberryFramework\App\Services\Builder;
+use Kenjiefx\StrawberryFramework\App\Models\BuildInstance;
+use Kenjiefx\StrawberryFramework\App\Services\QueryParser;
 use Kenjiefx\StrawberryFramework\App\Factories\ContainerFactory;
 use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\VentaCSS;
 
@@ -25,6 +27,18 @@ class Router
             $Builder = ContainerFactory::create()->get(Builder::class);
             $response->getBody()->write($Builder->theme());
             return $response;
+        });
+
+        $this->RouteServiceProvider->get('/widget/{widget}', function (Request $request, Response $response, $args) {
+            $buildId = (new QueryParser())->set($request->getUri()->getQuery())->get('build');
+            if (null===$buildId) return $response->withStatus(400);
+            BuildInstance::setId(intval($buildId));
+            $Builder = ContainerFactory::create()->get(Builder::class);
+            $responseArgs = $Builder->widget($args['widget']);
+            $response->getBody()->write($responseArgs['content']);
+            return $response
+                ->withHeader('Content-Type',$responseArgs['type'])
+                ->withStatus(200);
         });
 
         $this->RouteServiceProvider->get('/venta.app', function (Request $request, Response $response, $args) {

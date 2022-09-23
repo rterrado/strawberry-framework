@@ -60,6 +60,13 @@ class ComponentController extends ThemeController
                '.css.json';
     }
 
+    public function getCssPath()
+    {
+        return $this->getComponentDir().
+               '/'.
+               $this->ComponentModel->getName().
+               '.css';
+    }
 
 
 

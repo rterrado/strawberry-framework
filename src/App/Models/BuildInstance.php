@@ -14,4 +14,11 @@ class BuildInstance
         }
         return static::$instanceId;
     }
+
+    public static function setId(
+        int $id
+    )
+    {
+        static::$instanceId = $id;
+    }
 }
