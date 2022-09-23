@@ -45,6 +45,21 @@ class ComponentController extends ThemeController
                $this->ComponentModel->getName();
     }
 
+    public function toCache()
+    {
+        $this->ComponentCache->addItem(
+            ['name' => $this->ComponentModel->getName()]
+        );
+    }
+
+    public function getCssJsonPath()
+    {
+        return $this->getComponentDir().
+               '/'.
+               $this->ComponentModel->getName().
+               '.css.json';
+    }
+
 
 
 

@@ -1,1 +1,5 @@
 /vendor/
+/src/App/Cache/bin/components/*
+!/src/App/Cache/bin/components/node.txt
+/src/App/Cache/bin/css/*
+!/src/App/Cache/bin/css/node.txt

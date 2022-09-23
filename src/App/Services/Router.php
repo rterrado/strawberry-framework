@@ -21,7 +21,7 @@ class Router
     {
         $this->RouteServiceProvider->get('/', function (Request $request, Response $response, $args) {
             $Builder = ContainerFactory::create()->get(Builder::class);
-            $response->getBody()->write($Builder->component());
+            $response->getBody()->write($Builder->theme());
             return $response;
         });
     }

@@ -6,11 +6,10 @@ use Kenjiefx\StrawberryFramework\App\Cache\BinManager;
 use Kenjiefx\StrawberryFramework\App\Models\BuildInstance;
 use Kenjiefx\StrawberryFramework\App\Cache\CacheManagerInterface;
 
-class ComponentCache extends BinManager implements CacheManagerInterface
+class CssCache extends BinManager implements CacheManagerInterface
 {
-
     private int $buildId;
-    protected string $binNmspc = '/components/';
+    protected string $binNmspc = '/css/';
 
     public function __construct(
         private BuildInstance $BuildInstance
@@ -23,36 +22,27 @@ class ComponentCache extends BinManager implements CacheManagerInterface
         array $args
         )
     {
-        $existing = $this->loadItem();
-        if (!in_array($args['name'],$existing)) {
-            array_push($existing,$args['name']);
-        }
-        $this->saveItem($existing);
-    }
-
-    public function getId()
-    {
-        return $this->buildId.'.json';
+        $this->saveItem($this->loadItem().$args['content']);
     }
 
     public function loadItem()
     {
-        if (!$this->doItemExist()) return [];
-        return json_decode(
-            file_get_contents(
-                $this->getFilePath($this->getId())
-            )
+        if (!$this->doItemExist()) return '';
+        return file_get_contents(
+            $this->getFilePath($this->getId())
         );
     }
 
     private function saveItem(
-        array $data
+        string $data
         )
     {
-        $this->saveFile(
-            $this->getId(),
-            json_encode($data)
-        );
+        $this->saveFile($this->getId(),$data);
+    }
+
+    public function getId()
+    {
+        return $this->buildId.'.css';
     }
 
     public function doItemExist()
@@ -64,5 +54,7 @@ class ComponentCache extends BinManager implements CacheManagerInterface
 
 
 
-    
+
+
+
 }

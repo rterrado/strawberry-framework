@@ -6,5 +6,6 @@
     </head>
     <body>
         <?php component('Loader'); ?>
+        <?php component('Footer'); ?>
     </body>
 </html>

@@ -24,12 +24,17 @@ class Builder
         $this->ThemeModel->setName($Config('theme')['name']);
     }
 
-    public function component()
+    public function theme()
     {
         $this->ThemeController->setTheme($this->ThemeModel);
         $this->ThemeController->compile();
-        return $this->ThemeModel->getRawHTML();
+        $this->Css->setTheme($this->ThemeModel);
+        $this->Css->setRawHtml($this->ThemeModel->getRawHTML());
+        $this->Css->process();
+        return $this->Css->getProcessedHTML();
     }
+
+
 
 
 

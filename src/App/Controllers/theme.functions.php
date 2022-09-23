@@ -19,6 +19,6 @@ function component(
         echo 'Component not found';
         return;
     }
-    
+    $controller->toCache();
     include $pathToComponentHtml;
 }
