@@ -31,6 +31,8 @@ class Builder
         $this->Css->setTheme($this->ThemeModel);
         $this->Css->setRawHtml($this->ThemeModel->getRawHTML());
         $this->Css->process();
+        $this->Js->setTheme($this->ThemeModel);
+        $this->Js->process();
         return $this->Css->getProcessedHTML();
     }
 
@@ -44,6 +46,10 @@ class Builder
             case 'app.css': 
                 $mimeType = 'text/css';
                 $returnContent .= $this->Css->getFromCache();
+                break;
+            case 'app.js':
+                $mimeType = 'text/javascript';
+                $returnContent .= $this->Js->getFromCache();
                 break;
             default: 
                 break;

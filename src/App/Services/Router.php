@@ -10,6 +10,7 @@ use Kenjiefx\StrawberryFramework\App\Models\BuildInstance;
 use Kenjiefx\StrawberryFramework\App\Services\QueryParser;
 use Kenjiefx\StrawberryFramework\App\Factories\ContainerFactory;
 use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\VentaCSS;
+use Kenjiefx\StrawberryFramework\App\Extensions\StrawberryJS\StrawberryJS;
 
 class Router
 {
@@ -39,6 +40,12 @@ class Router
             return $response
                 ->withHeader('Content-Type',$responseArgs['type'])
                 ->withStatus(200);
+        });
+
+        $this->RouteServiceProvider->get('/strawberry.js', function (Request $request, Response $response, $args) {
+            header('Content-type: text/javascript');
+            StrawberryJS::build();
+            return $response;
         });
 
         $this->RouteServiceProvider->get('/venta.app', function (Request $request, Response $response, $args) {

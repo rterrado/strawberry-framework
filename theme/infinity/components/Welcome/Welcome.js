@@ -1,0 +1,3 @@
+app.component('Welcome',($scope)=>{
+
+});

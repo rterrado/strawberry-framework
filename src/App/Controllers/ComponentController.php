@@ -68,6 +68,14 @@ class ComponentController extends ThemeController
                '.css';
     }
 
+    public function getJsPath()
+    {
+        return $this->getComponentDir().
+               '/'.
+               $this->ComponentModel->getName().
+               '.js';
+    }
+
 
 
 

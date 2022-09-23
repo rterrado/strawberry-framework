@@ -15,6 +15,26 @@ class WidgetController extends ThemeController
         return $this->ThemeModel->getThemeDir().'/widgets';
     }
 
+    public function getJsWidgetPath()
+    {
+        return $this->getWidgetPath().'/js';
+    }
+
+    public function getJsMainPath()
+    {
+        return $this->getJsWidgetPath().'/main.js';
+    }
+
+    public function getJsFactoriesPath()
+    {
+        return $this->getJsWidgetPath().'/factories';
+    }
+
+    public function getJsServicesPath()
+    {
+        return $this->getJsWidgetPath().'/services';
+    }
+
     public function getCssWidgetPath()
     {
         return $this->getWidgetPath().'/css';

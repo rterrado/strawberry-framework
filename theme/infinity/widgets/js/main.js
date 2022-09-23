@@ -1,0 +1,1 @@
+const app = strawberry.create('app');

@@ -85,7 +85,6 @@ class VentaCSS  {
         $this->registerClasses();
         $this->compileGroupedUtilityClasses();
         $this->compileUtilityClasses();
-        //$this->exportUsableCSS();
         $this->generatePostProcessHTML();
     }
 
@@ -134,15 +133,20 @@ class VentaCSS  {
             $minifiedClassName = $this->ClassNameMinifier->create();
 
             foreach ($this->ClassRegistry as $classStatement => $classDetails) {
-
+                
                 if (in_array($selector,$classDetails['classList'])) {
-
-                    array_push($this->ClassRegistry[$classStatement]['minifiedClassNames'],$minifiedClassName);
-
+                    $newArr = [];
+                    foreach ($classDetails['minifiedClassNames'] as $unMinifiedClassName) {
+                        if ($unMinifiedClassName===$selector) {
+                            array_push($newArr,$minifiedClassName);
+                        } else {
+                            array_push($newArr,$unMinifiedClassName);
+                        }
+                    }
+                    $this->ClassRegistry[$classStatement]['minifiedClassNames'] = $newArr;
                     $this->UsedUtilityClasses[$minifiedClassName] = $rules;
-
                 }
-
+                
             }
         }
     }

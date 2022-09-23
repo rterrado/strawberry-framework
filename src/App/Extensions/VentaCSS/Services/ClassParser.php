@@ -41,7 +41,7 @@ class ClassParser {
                 //array_push($classes,'class="'.$classList.'"');
                 $classes['class="'.$classList.'"'] = [
                     'classList' => explode(' ',$classList),
-                    'minifiedClassNames' => []
+                    'minifiedClassNames' => explode(' ',$classList)
                 ];
                 $classList = '';
                 $isRecording = false;

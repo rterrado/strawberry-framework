@@ -1,0 +1,2 @@
+<script type="text/javascript" src="/strawberry.js"></script>
+<script type="text/javascript" src="/widget/app.js?build=<?php echo Kenjiefx\StrawberryFramework\App\Models\BuildInstance::id();?>"></script>

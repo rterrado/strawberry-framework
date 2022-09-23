@@ -3,3 +3,5 @@
 !/src/App/Cache/bin/components/node.txt
 /src/App/Cache/bin/css/*
 !/src/App/Cache/bin/css/node.txt
+/src/App/Cache/bin/js/*
+!/src/App/Cache/bin/js/node.txt
