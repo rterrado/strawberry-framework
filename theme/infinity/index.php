@@ -3,6 +3,8 @@
     <head>
         <meta charset="utf-8">
         <title>Strawberry Framework</title>
+        <?php scripts() ?>
+        <?php stylesheets(); ?>
     </head>
     <body>
         <?php component('Loader'); ?>

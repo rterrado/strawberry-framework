@@ -1,0 +1,1 @@
+<link rel="stylesheet" href="/widget/app.css?build=<?php echo Kenjiefx\StrawberryFramework\App\Models\BuildInstance::id(); ?>">

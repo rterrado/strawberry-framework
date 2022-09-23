@@ -180,4 +180,13 @@ class VentaCSS  {
         return $this->PostProcessedHTML;
     }
 
+    public function getDashboard()
+    {
+        ob_start();
+        include __dir__.'/Dashboard/dashboard.php';
+        $dashboard = ob_get_contents();
+        ob_end_clean();
+        return $dashboard;
+    }
+
 }

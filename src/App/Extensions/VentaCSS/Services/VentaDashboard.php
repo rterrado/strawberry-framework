@@ -25,4 +25,10 @@ class VentaDashboard {
         $this->selectorEntities[$groupName][$selectorType]['variants'][$selectorName] = $selectorValue;
     }
 
+
+    public function export()
+    {
+        return $this->selectorEntities;
+    }
+
 }
