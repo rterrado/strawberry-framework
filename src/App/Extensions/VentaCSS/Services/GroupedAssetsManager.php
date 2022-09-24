@@ -44,7 +44,6 @@ class GroupedAssetsManager {
             $this->parseGroups(
                 $this->loadCssJsonFile($widgetCssJsonPath)
             );
-
         }
 
         return $this->groups;

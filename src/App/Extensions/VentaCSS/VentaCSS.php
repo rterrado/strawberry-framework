@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS;
 use Kenjiefx\StrawberryFramework\App\Services\Cache\CSSCacheManager;
 use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\VentaConfig;
-use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\Factories\VentaConfigFactory;
 use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\Services\ClassParser;
 use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\Services\AssetsManager;
-use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\Services\SelectorStructure;
 use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\Services\ClassNameMinifier;
+use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\Services\MediaQueryManager;
+use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\Services\SelectorStructure;
+use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\Factories\VentaConfigFactory;
 use Kenjiefx\StrawberryFramework\App\Extensions\VentaCSS\Services\GroupedAssetsManager;
 
 
@@ -66,7 +67,8 @@ class VentaCSS  {
         private ClassParser $ClassParser,
         private AssetsManager $AssetsManager,
         private GroupedAssetsManager $GroupedAssetsManager,
-        private ClassNameMinifier $ClassNameMinifier
+        private ClassNameMinifier $ClassNameMinifier,
+        private MediaQueryManager $MediaQueryManager
         )
     {
         $this->VentaConfig = VentaConfigFactory::create();
@@ -85,6 +87,7 @@ class VentaCSS  {
         $this->registerClasses();
         $this->compileGroupedUtilityClasses();
         $this->compileUtilityClasses();
+        $this->compileMediaQueryBreakpoints();
         $this->generatePostProcessHTML();
     }
 
@@ -101,24 +104,20 @@ class VentaCSS  {
         foreach ($this->GroupedAssetsManager->compileAssets() as $groupName => $members) {
 
             foreach ($this->ClassRegistry as $classStatement => $classDetails) {
-
-                $classList = [];
-
-                foreach ($classDetails['classList'] as $class) {
-
-                    if ($class===$groupName) {
-
-                        foreach ($members as $member) {
-                            array_push($classList,$member);
+                if  (in_array($groupName,$classDetails['classList'])) {
+                    $updatedClassList = [];
+                    foreach ($classDetails['minifiedClassNames'] as $unExtractedClassName) {
+                        if ($unExtractedClassName===$groupName) {
+                            foreach ($members as $member) {
+                                array_push($updatedClassList,$member);
+                            }
+                        } else {
+                            array_push($updatedClassList,$unExtractedClassName);
                         }
-
-                    } else {
-                        array_push($classList,$class);
                     }
-
+                    $this->ClassRegistry[$classStatement]['minifiedClassNames'] = $updatedClassList;
+                    $this->ClassRegistry[$classStatement]['classList'] = $updatedClassList;
                 }
-
-                $this->ClassRegistry[$classStatement]['classList'] = $classList;
 
             }
         }
@@ -135,6 +134,7 @@ class VentaCSS  {
             foreach ($this->ClassRegistry as $classStatement => $classDetails) {
                 
                 if (in_array($selector,$classDetails['classList'])) {
+                    
                     $newArr = [];
                     foreach ($classDetails['minifiedClassNames'] as $unMinifiedClassName) {
                         if ($unMinifiedClassName===$selector) {
@@ -146,7 +146,32 @@ class VentaCSS  {
                     $this->ClassRegistry[$classStatement]['minifiedClassNames'] = $newArr;
                     $this->UsedUtilityClasses[$minifiedClassName] = $rules;
                 }
-                
+            }
+        }
+    }
+
+    private function compileMediaQueryBreakpoints()
+    {
+        foreach ($this->MediaQueryManager->compileAssets() as $widthQueryClause => $mediaQueryAsset) {
+            foreach ($mediaQueryAsset['selector_list'] as $selectorName => $selectorValue) {
+                $minifiedClassName = $this->ClassNameMinifier->create();
+                foreach ($this->ClassRegistry as $classStatement => $classDetails) {
+                    if (in_array($selectorName,$classDetails['classList'])) {
+                        $newArr = [];
+                        foreach ($classDetails['minifiedClassNames'] as $unMinifiedClassName) {
+                            if ($unMinifiedClassName===$selectorName) {
+                                array_push($newArr,$minifiedClassName);
+                            } else {
+                                array_push($newArr,$unMinifiedClassName);
+                            }
+                        }
+                        $this->ClassRegistry[$classStatement]['minifiedClassNames'] = $newArr;
+                        if (!isset($this->UsedMediaQueryBreakpoints[$widthQueryClause])) {
+                            $this->UsedMediaQueryBreakpoints[$widthQueryClause] = [];
+                        }
+                        $this->UsedMediaQueryBreakpoints[$widthQueryClause][$minifiedClassName] = $selectorValue;
+                    }
+                }
             }
         }
     }
@@ -161,6 +186,13 @@ class VentaCSS  {
         $css = '';
         foreach ($this->UsedUtilityClasses as $selector => $rules) {
             $css .= '.'.$selector.'{'.$rules.'}';
+        }
+        foreach ($this->UsedMediaQueryBreakpoints as $breakpoint => $listOfRules) {
+            $css .= '@media screen and ('.$breakpoint.'px){';
+                foreach ($listOfRules as $selector => $rules) {
+                    $css .= '.'.$selector.'{'.$rules.'}';
+                }
+            $css .= '}';
         }
         return $css;
     }
