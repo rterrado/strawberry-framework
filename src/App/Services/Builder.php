@@ -26,13 +26,27 @@ class Builder
 
     public function theme()
     {
+        /**
+         * This phase of the build process compiles all the used component 
+         * in the theme into one string of HTML codes, saving 
+         * it in the $rawHTML property of the Theme Model object.
+         */
         $this->ThemeController->setTheme($this->ThemeModel);
         $this->ThemeController->compile();
+
+        /**
+         * This phase of the build process analyzes, compiles, and minifies 
+         * all the used CSS in the theme
+         */
         $this->Css->setTheme($this->ThemeModel);
         $this->Css->setRawHtml($this->ThemeModel->getRawHTML());
         $this->Css->process();
+
+
         $this->Js->setTheme($this->ThemeModel);
         $this->Js->process();
+
+
         return $this->Css->getProcessedHTML();
     }
 

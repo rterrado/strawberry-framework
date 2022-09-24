@@ -31,8 +31,7 @@ class CSSBundler
             $component->setComponentName($componentName);
             $css .=  file_get_contents($component->getCssPath());
         }
-        $shortened = trim(preg_replace('/\t+/', '', $css));
-        return str_replace(["\r","\n"],"", $shortened);
+        return $this->removeExcessChars($css);
     }
 
     public function bundleFromWidgetCss()
@@ -42,7 +41,13 @@ class CSSBundler
         foreach ($this->WidgetController->getAllCsspaths() as $cssPath) {
             $css .=  file_get_contents($cssPath);
         }
-        $shortened = trim(preg_replace('/\t+/', '', $css));
-        return str_replace(["\r","\n"],"", $shortened);
+        return $this->removeExcessChars($css);
+    }
+
+    private function removeExcessChars(
+        string $chars
+        )
+    {
+        return str_replace(["\r","\n","    ","\t"],"", $chars);
     }
 }

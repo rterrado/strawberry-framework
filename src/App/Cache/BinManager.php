@@ -24,7 +24,17 @@ class BinManager
         string $data
         )
     {
+        $this->clearNmspc();
         file_put_contents($this->getFilePath($fileName),$data);
+    }
+
+    private function clearNmspc() 
+    {
+        $nmspc = $this->getNmpscPath();
+        foreach (scandir($nmspc) as $file) {
+            if ($file==='.'||$file==='..'||$file==='node.txt') continue;
+            unlink($nmspc.'/'.$file);
+        }
     }
 
 }

@@ -42,6 +42,11 @@ class Router
                 ->withStatus(200);
         });
 
+        $this->RouteServiceProvider->get('/favicon.ico', function (Request $request, Response $response, $args) {
+            
+            return $response;
+        });
+
         $this->RouteServiceProvider->get('/strawberry.js', function (Request $request, Response $response, $args) {
             header('Content-type: text/javascript');
             StrawberryJS::build();
